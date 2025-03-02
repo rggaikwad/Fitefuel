@@ -1,20 +1,37 @@
 version: 0.2
+
+env:
+  variables:
+    REPOSITORY_URI: "314146300525.dkr.ecr.us-east-1.amazonaws.com/fitfuel"
+  compute-type: BUILD_GENERAL1_MEDIUM
+  image: "aws/codebuild/standard:5.0"
+
 phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - echo "Updating pip..."
+      - python -m pip install --upgrade pip
+      - yum install -y sqlite
+
   pre_build:
     commands:
       - echo "Logging in to AWS ECR..."
-      - aws ecr get-login-password | docker login --username AWS --password-stdin 314146300525.dkr.ecr.us-east-1.amazonaws.com
-      - REPOSITORY_URI=314146300525.dkr.ecr.us-east-1.amazonaws.com/fitfuel
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+
   build:
     commands:
       - echo "Building Docker image..."
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+
   post_build:
     commands:
       - echo "Pushing Docker image to ECR..."
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - printf '[{"name":"fitfuel","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+
 artifacts:
-  files: 
+  files:
     - imagedefinitions.json
