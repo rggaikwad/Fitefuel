@@ -1,0 +1,21 @@
+# buildspec.yml (AWS CodeBuild Script)
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to AWS ECR..."
+      - aws ecr get-login-password | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
+      - REPOSITORY_URI=<AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/fitfuel
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+  post_build:
+    commands:
+      - echo "Pushing Docker image to ECR..."
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - printf '[{"name":"fitfuel","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+  files: 
+    - imagedefinitions.json

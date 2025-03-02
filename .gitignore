@@ -1,0 +1,9 @@
+
+
+# .gitignore
+__pycache__/
+*.pycna
+*.pyo
+*.pyd
+venv/
+fitfuel.db
