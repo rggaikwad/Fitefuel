@@ -11,15 +11,16 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
+      - echo "Updating system packages..."
+      - apt-get update && apt-get install -y sqlite3
       - echo "Updating pip..."
       - python -m pip install --upgrade pip
-      - yum install -y sqlite
 
   pre_build:
     commands:
       - echo "Logging in to AWS ECR..."
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 314146300525.dkr.ecr.us-east-1.amazonaws.com
+      - export IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
