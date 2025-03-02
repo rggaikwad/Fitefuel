@@ -1,11 +1,10 @@
-# buildspec.yml (AWS CodeBuild Script)
 version: 0.2
 phases:
   pre_build:
     commands:
       - echo "Logging in to AWS ECR..."
-      - aws ecr get-login-password | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
-      - REPOSITORY_URI=<AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/fitfuel
+      - aws ecr get-login-password | docker login --username AWS --password-stdin 314146300525.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=314146300525.dkr.ecr.us-east-1.amazonaws.com/fitfuel
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
