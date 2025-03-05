@@ -1,10 +1,9 @@
-# appspec.yml (AWS CodeDeploy Config)
-version: 0.0
+version: 0.2
 Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: "fitfuel-task"
+        TaskDefinition: ""  
         LoadBalancerInfo:
           ContainerName: "fitfuel"
-          ContainerPort: 8501
+          ContainerPort: 
