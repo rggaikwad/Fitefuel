@@ -11,9 +11,9 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - echo "Updating pip..."
-      - python -m pip install --upgrade pip
-      - yum install -y sqlite
+      - apt-get update
+      - apt-get install -y sqlite3
+     
 
   pre_build:
     commands:
