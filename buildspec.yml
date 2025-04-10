@@ -18,9 +18,10 @@ phases:
 
   pre_build:
     commands:
-      - echo "Logging in to AWS ECR..."
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 314146300525.dkr.ecr.us-east-1.amazonaws.com
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
       - export IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo "Image Tag: $IMAGE_TAG"
 
   build:
     commands:
@@ -31,6 +32,7 @@ phases:
     commands:
       - echo "Pushing Docker image to ECR..."
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Writing imagedefinitions.json for ECS deployment..."
       - printf '[{"name":"fitfuel","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
