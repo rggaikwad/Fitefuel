@@ -3,8 +3,6 @@ version: 0.2
 env:
   variables:
     REPOSITORY_URI: "314146300525.dkr.ecr.us-east-1.amazonaws.com/fitfuel"
-  compute-type: BUILD_GENERAL1_MEDIUM
-  image: "aws/codebuild/standard:5.0"
 
 phases:
   install:
