@@ -1,6 +1,6 @@
 # FitFuel Diet Planner
 ## Overview
-FitFuel is a diet planner web app built with Streamlit, containerized with Docker, and deployed using AWS CodePipeline with CodeBuild & CodeDeploy.
+FitFuel is a diet planner web app built with Streamlit, containerized with Docker, and deployed using  jenkins and github actions 
 
 ## Installation
 ```sh
